@@ -3,7 +3,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config(object):
 
-    PROJECT = 'pdx_ulti'
+    PROJECT = 'ulti'
 
     # Get app root path
     PROJECT_ROOT = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
