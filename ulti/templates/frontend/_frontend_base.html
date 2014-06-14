@@ -1,0 +1,28 @@
+{% extends "_base.html" %}
+{% import "macros/_css.html" as css %}
+    {%- block css -%}
+        {{ css.render_css('main') }}
+    {%- endblock -%}
+
+    {%- block siteheader %}
+    {%- endblock siteheader -%}
+
+    {% block sitefooter %}
+            <footer role="contentinfo" class="footer">
+                <div class="bottom cf">
+                    <div class="wrapper">
+                        <span class="copyright medium-float-left">
+                            <a href="http://creativecommons.org/licenses/by-nc-nd/4.0/">Copyright © 2014</a>
+                            &nbsp;·&nbsp; Joe Hand
+                        </span>
+                        <span class="made medium-float-right">
+                            <a href="#">Contact</a>
+                            &nbsp;·&nbsp;<a href="http://joeahand.com">Made by <span class="useicons">&#xe635;</span></a>
+                        </span>
+                    </div>
+                </div>
+            </footer>
+    {%- endblock sitefooter %}
+
+{%- block footer_js %}
+{%- endblock footer_js %}

@@ -1,0 +1,38 @@
+@import 'main.less';         // Get all the main css stuff
+
+/* ================================================================= *\
+   Adjustments from Main Stylesheet
+\* ================================================================== */
+
+.main {
+    margin-top:2rem;
+    position: relative;
+}
+
+
+.document {
+    border:none;
+
+    &::before, &::after {
+        content:"";
+        height:5px;
+        display:block;
+        position: fixed;
+        width:100%;
+        left:0;
+        background-color:@heading-font-color;
+        z-index:100;
+        transition: background-color 1000ms ease-in;
+    }
+
+    &:before {
+        top:0;
+    }
+
+    &:after {
+        bottom:0;
+    }
+}
+
+
+@import 'libs/modals.less';
