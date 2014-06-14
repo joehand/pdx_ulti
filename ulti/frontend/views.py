@@ -5,7 +5,7 @@ from flask.ext.classy import FlaskView, route
 
 from .models import Team
 
-frontend = Blueprint('frontend', __name__, url_prefix='', template_folder='templates')
+frontend = Blueprint('frontend', __name__, url_prefix='')
 
 class TeamView(FlaskView):
     ''' Our base View for the main Item
@@ -16,9 +16,12 @@ class TeamView(FlaskView):
         ''' Our main index view '''
         return render_template('frontend/index.html')
 
-    def get(self, id):
+    @route('/<slug>/', endpoint='team')
+    def get(self, slug):
         ''' View for a single team'''
-        return render_template('frontend/index.html')
+        team = Team.objects(slug=slug).first_or_404()
+        return render_template('frontend/team.html', team=team)
+
 
 
 #Register our View Class

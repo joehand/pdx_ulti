@@ -12,7 +12,7 @@
         <link rel="dns-prefetch" href="//s3.amazonaws.com">
         {%- endif %}
 
-        <title>{% block title %}PDX Ultimate% endblock title %}</title>
+        <title>{% block title %}PDX Ultimate{% endblock title %}</title>
         <meta name="description" content="{% block description %}{% endblock description %}">
 
         <!-- Styles -->
@@ -35,6 +35,10 @@
 
         {%- block main %}
             <main role="main" class="main wrapper">
+                <div class="page-header">
+                {%- block pageheader -%}
+                {% endblock pageheader -%}
+                </div> <!-- .page-header  -->
                 <div class="page-content">
                 {%- with messages = get_flashed_messages() -%}
                       {% if messages %}
@@ -48,8 +52,26 @@
                 {%- block content -%}
                 {%- endblock content %}
                 </div> <!-- .page-content  -->
+                <div class="page-footer">
+                {%- block pagefooter -%}
+                {% endblock pagefooter -%}
+                </div> <!-- .page-footer -->
             </main> <!-- main  -->
             {%- block sitefooter %}
+            <footer role="contentinfo" class="footer">
+                <div class="bottom cf">
+                    <div class="wrapper">
+                        <span class="copyright medium-float-left">
+                            <a href="http://creativecommons.org/licenses/by-nc-nd/4.0/">Copyright © 2014</a>
+                            &nbsp;·&nbsp; PDX Ultimate
+                        </span>
+                        <span class="made medium-float-right">
+                            <a href="#">Contact</a>
+                            &nbsp;·&nbsp;<a href="http://joeahand.com">Made by <span class="useicons">&#xe635;</span></a>
+                        </span>
+                    </div>
+                </div>
+            </footer>
             {% endblock sitefooter -%}
         {%- endblock main %}
         </div> <!-- document -->
