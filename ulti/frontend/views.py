@@ -14,7 +14,8 @@ class TeamView(FlaskView):
 
     def index(self):
         ''' Our main index view '''
-        return render_template('frontend/index.html')
+        teams = Team.objects()
+        return render_template('frontend/index.html', teams=teams)
 
     @route('/<slug>/', endpoint='team')
     def get(self, slug):

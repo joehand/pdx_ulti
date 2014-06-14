@@ -6,10 +6,15 @@
 {%- endblock -%}
 
 {%- block content -%}
-Hello world.
+{% for team in teams %}
+<h5>
+<a href="{{url_for('frontend.team', slug=team.slug)}}">{{team.name}}</a>
+</h5>
+{% endfor %}
 {%- endblock content -%}
 
 
 {%- block pagefooter -%}
-I am foot
+<hr>
+<p>PDXUltimate.com is the place to find information about all the Ultimate Frisbee clubs in Portland. To contact a team direct, please use contact information listed on their page. If you are interested in leages or pickup in Portland, please visit PortlandUltimate.com</p>
 {%- endblock -%}
