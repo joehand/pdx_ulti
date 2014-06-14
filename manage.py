@@ -1,6 +1,8 @@
 # manage.py
 import os
 
+from flask import url_for
+
 from flask.ext.script import Manager, Shell, Server
 from flask.ext.security import MongoEngineUserDatastore
 from flask.ext.security.utils import encrypt_password
@@ -33,6 +35,24 @@ def initdb():
     )
 
     user_datastore.add_role_to_user(user, admin_role)
+
+@manager.command
+def routes():
+    import urllib
+    output = []
+    for rule in app.url_map.iter_rules():
+
+        options = {}
+        for arg in rule.arguments:
+            options[arg] = "[{0}]".format(arg)
+
+        methods = ','.join(rule.methods)
+        url = url_for(rule.endpoint, **options)
+        line = urllib.unquote("{:50s} {:20s} {}".format(rule.endpoint, methods, url))
+        output.append(line)
+
+    for line in sorted(output):
+        print line
 
 @manager.command
 def buildjs():
