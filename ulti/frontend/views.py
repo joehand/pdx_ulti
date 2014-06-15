@@ -12,6 +12,7 @@ class TeamView(FlaskView):
     '''
     route_base = '/'
 
+    @route('/', endpoint='index')
     def index(self):
         ''' Our main index view '''
         teams = Team.objects()
