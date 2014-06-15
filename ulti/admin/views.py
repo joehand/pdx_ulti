@@ -43,7 +43,7 @@ class TeamAdminView(FlaskView):
     @route('/<slug>/', endpoint='team', methods=['GET', 'POST'])
     def team(self, slug):
         '''  '''
-        if current_user.has_role('super_admin'):
+        if not current_user.has_role('super_admin'):
             # TODO: Check if current user is 'owner' of this team
             flash('You do not have permission to view this page')
             return redirect(url_for('frontend.index'))
