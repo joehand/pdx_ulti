@@ -8,16 +8,9 @@
 
 
 {%- block content -%}
-<form class="" method='post' action="">
-    {{ form.hidden_tag() }}
-    <fieldset class="">
-            {{ wtf.regular_field(form.name) }}
-            {{ wtf.regular_field(form.slug) }}
-            {{ wtf.regular_field(form.twitter) }}
-            {{ wtf.regular_field(form.roster_url) }}
-            {{ wtf.regular_field(form.fb_url) }}
-            {{ wtf.regular_field(form.about) }}
-    </fieldset>
+<form class="" method='post'  enctype="multipart/form-data" action=".">
+    <h4>Edit Team Information</h4>
+    {% include "admin/partials/team_form.html" %}
     <button type="submit" class="float-right button button-primary">Submit</button>
 </form>
 {%- endblock -%}

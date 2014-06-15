@@ -14,13 +14,13 @@ class Team(db.Document):
     twitter = db.StringField(unique=True)
     fb_url = db.StringField(unique=True)
     email = db.StringField()
-    about = db.StringField()
+    logo = db.StringField()
+    brief_about = db.StringField()
 
     created_time = db.DateTimeField(default=datetime.utcnow(),
             required=True)
     last_update = db.DateTimeField(default=datetime.utcnow(),
             required=True)
-
 
     def clean(self):
         '''Clean Data!

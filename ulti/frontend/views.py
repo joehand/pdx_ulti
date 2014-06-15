@@ -20,10 +20,11 @@ class TeamView(FlaskView):
 
     @route('/<slug>/', endpoint='team')
     def get(self, slug):
-        ''' View for a single team'''
+        ''' View for a single team
+            TODO: Change this to subdomains
+        '''
         team = Team.objects(slug=slug).first_or_404()
         return render_template('frontend/team.html', team=team)
-
 
 
 #Register our View Class

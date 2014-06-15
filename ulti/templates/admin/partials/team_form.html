@@ -1,0 +1,13 @@
+{% import "macros/_wtf.html" as wtf %}
+
+{{ form.hidden_tag() }}
+<fieldset class="">
+    {{ wtf.regular_field(form.name) }}
+    {{ wtf.regular_field(form.logo) }}
+    {{ wtf.regular_field(form.slug) }}
+    {{ wtf.regular_field(form.email) }}
+    {{ wtf.regular_field(form.roster_url) }}
+    {{ wtf.regular_field(form.twitter) }}
+    {{ wtf.regular_field(form.fb_url) }}
+    {{ wtf.regular_field(form.brief_about) }}
+</fieldset>

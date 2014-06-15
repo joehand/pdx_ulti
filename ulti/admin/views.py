@@ -4,9 +4,11 @@ from flask import (abort, Blueprint, flash, g, redirect,
 from flask.ext.classy import FlaskView, route
 from flask.ext.security import (current_user, login_required,
                                 roles_required)
+from werkzeug import secure_filename
 
 from .forms import TeamForm
 from ..frontend import Team
+from ..utils import s3_upload, s3_signer
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -50,14 +52,24 @@ class TeamAdminView(FlaskView):
 
         team = Team.objects(slug=slug).first_or_404()
         form = TeamForm(obj=team)
+        print form.validate_on_submit()
         if form.validate_on_submit():
             form.populate_obj(team)
+            team.logo = ''
+            if form.logo.data:
+                upload = s3_upload(form.logo.data.filename, form.logo)
+                team.logo = upload
+                flash('Logo uploaded to %s', upload)
             team.save()
             flash('Changes Saved')
             return render_template('admin/team.html',
                     team=team, form=form)
         return render_template('admin/team.html', team=team, form=form)
 
+@login_required
+@admin.route('/sign_s3/', endpoint='signS3')
+def sign_s3():
+    return s3_signer(request)
 
 #Register our View Class
 AdminView.register(admin)
