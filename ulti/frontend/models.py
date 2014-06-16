@@ -4,10 +4,11 @@ from flask import current_app as app
 
 from .constants import *
 from ..extensions import db
-from ..utils import slugify
+from ..utils import slugify, mongo_to_dict
 from ..user import User
 
 class Team(db.Document):
+    admins = db.ListField(db.ReferenceField(User), default=[])
     name = db.StringField(unique=True)
     slug = db.StringField(unique=True)
     roster_url = db.StringField(unique=True)
@@ -15,7 +16,8 @@ class Team(db.Document):
     fb_url = db.StringField(unique=True)
     email = db.StringField()
     logo = db.StringField()
-    brief_about = db.StringField()
+    #division = db.StringField(choices=DIVISIONS)
+    brief_about = db.StringField(max_length=255)
 
     created_time = db.DateTimeField(default=datetime.utcnow(),
             required=True)
@@ -31,3 +33,6 @@ class Team(db.Document):
 
         # Add last update timestamp
         self.last_update = datetime.utcnow()
+
+    def to_dict(self):
+        return mongo_to_dict(self)

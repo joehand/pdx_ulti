@@ -4,18 +4,21 @@ from datetime import datetime
 from hashlib import sha1
 import hmac
 import json
+import os
 import re
 import six
 import time
 import urllib
+from uuid import uuid4
 
 import boto
 from flask import current_app as app
 from flask import Markup
+from werkzeug import secure_filename
 
+from .extensions import db
 
 def s3_signer(request):
-
         AWS_ACCESS_KEY = app.config['AWS_ACCESS_KEY_ID']
         AWS_SECRET_KEY =  app.config['AWS_SECRET_ACCESS_KEY']
         S3_BUCKET =  app.config['S3_BUCKET_NAME']
@@ -42,7 +45,7 @@ def s3_signer(request):
             })
 
 
-def s3_upload(filename,contents,acl='public-read'):
+def s3_upload(source_file,acl='public-read'):
     ''' From: https://github.com/doobeh/Flask-S3-Uploader/blob/master/tools.py
 
         Uploads WTForm File Object to Amazon S3
@@ -58,6 +61,10 @@ def s3_upload(filename,contents,acl='public-read'):
         the uuid4 function combined with the file extension from
         the source file.
     '''
+    source_filename = secure_filename(source_file.data.filename)
+    source_extension = os.path.splitext(source_filename)[1]
+
+    destination_filename = uuid4().hex + source_extension
     # Connect to S3 and upload file.
     conn = boto.connect_s3(
             app.config['AWS_ACCESS_KEY_ID'],
@@ -65,8 +72,9 @@ def s3_upload(filename,contents,acl='public-read'):
     b = conn.get_bucket(app.config['S3_BUCKET_NAME'])
 
     sml = b.new_key(
-            '/'.join([app.config['S3_UPLOAD_DIRECTORY'],filename]))
-    sml.set_contents_from_string(contents)
+            '/'.join([app.config['S3_UPLOAD_DIRECTORY'],
+                        destination_filename]))
+    sml.set_contents_from_string(source_file.data.read())
     sml.set_acl(acl)
 
     return sml.generate_url(expires_in=300, query_auth=False)
@@ -121,3 +129,45 @@ def slugify(value, substitutions=()):
     value = value.encode('ascii', 'ignore')
     # but Pelican should generally use only unicode
     return value.decode('ascii')
+
+
+def mongo_to_dict(obj):
+    return_data = []
+
+    if isinstance(obj, db.DynamicDocument):
+        return_data.append(('id',str(obj.id)))
+    if isinstance(obj, db.Document):
+        return_data.append(('id',str(obj.id)))
+
+    for field_name in obj._fields:
+
+        if field_name in ('id',):
+            continue
+
+        data = obj._data[field_name]
+
+        if isinstance(obj._fields[field_name], db.DateTimeField):
+            if data:
+                return_data.append((field_name, str(data.isoformat())))
+        elif isinstance(obj._fields[field_name], db.StringField):
+            try:
+                data = str(data)
+            except:
+                data = data
+                pass
+            return_data.append((field_name, data))
+        elif isinstance(obj._fields[field_name], db.FloatField):
+            return_data.append((field_name, float(data)))
+        elif isinstance(obj._fields[field_name], db.BooleanField):
+            return_data.append((field_name, str(data)))
+        elif isinstance(obj._fields[field_name], db.IntField):
+            return_data.append((field_name, int(data)))
+        elif isinstance(obj._fields[field_name], db.ListField):
+            return_data.append((field_name, data))
+        elif isinstance(obj._fields[field_name],
+                db.EmbeddedDocumentField):
+            return_data.append((field_name, mongo_to_dict(data)))
+        elif isinstance(obj._fields[field_name], db.DictField):
+            return_data.append((field_name, data))
+
+    return dict(return_data)

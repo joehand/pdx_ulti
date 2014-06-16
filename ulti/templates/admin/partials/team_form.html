@@ -3,6 +3,9 @@
 {{ form.hidden_tag() }}
 <fieldset class="">
     {{ wtf.regular_field(form.name) }}
+    {% if team.logo %}
+        <img src="{{team.logo}}"/>
+    {% endif %}
     {{ wtf.regular_field(form.logo) }}
     {{ wtf.regular_field(form.slug) }}
     {{ wtf.regular_field(form.email) }}

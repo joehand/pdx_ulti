@@ -12,6 +12,7 @@ from ..utils import s3_upload, s3_signer
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
 
+
 class AdminView(FlaskView):
     '''
     '''
@@ -29,6 +30,11 @@ class AdminView(FlaskView):
         form = TeamForm(obj=team)
         if form.validate_on_submit():
             form.populate_obj(team)
+            team.logo = ''
+            if form.logo.data:
+                upload = s3_upload(form.logo.data.filename, form.logo)
+                team.logo = upload
+                flash('Logo uploaded to %s', upload)
             team.save()
             flash('New team added')
             return redirect(url_for('frontend.team', team=team.slug))
@@ -45,6 +51,7 @@ class TeamAdminView(FlaskView):
     @route('/<slug>/', endpoint='team', methods=['GET', 'POST'])
     def team(self, slug):
         '''  '''
+        print 'hitting route'
         if not current_user.has_role('super_admin'):
             # TODO: Check if current user is 'owner' of this team
             flash('You do not have permission to view this page')
@@ -52,18 +59,21 @@ class TeamAdminView(FlaskView):
 
         team = Team.objects(slug=slug).first_or_404()
         form = TeamForm(obj=team)
+        print 'here'
         print form.validate_on_submit()
         if form.validate_on_submit():
-            form.populate_obj(team)
-            team.logo = ''
             if form.logo.data:
-                upload = s3_upload(form.logo.data.filename, form.logo)
-                team.logo = upload
-                flash('Logo uploaded to %s', upload)
+                upload = s3_upload(form.logo)
+            else:
+                upload = team.logo
+            form.populate_obj(team)
+            team.logo = upload
+            print 'Updated team information %s' % team.to_dict()
             team.save()
             flash('Changes Saved')
             return render_template('admin/team.html',
                     team=team, form=form)
+        print 'here2'
         return render_template('admin/team.html', team=team, form=form)
 
 @login_required
