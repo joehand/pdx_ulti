@@ -9,12 +9,11 @@ define([
     'underscore',
     'views/AppView',
     'models/AppModel',
-    'backboneStick',
 ], function (Backbone, $, _, AppView, AppModel) {
 
     var appView, appModel, NAMESPACE;
 
-    NAMESPACE = things //for now...
+    NAMESPACE = ulti
 
     appModel = new AppModel(NAMESPACE);
 
