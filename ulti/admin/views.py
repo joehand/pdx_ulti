@@ -31,10 +31,15 @@ class AdminView(FlaskView):
         if form.validate_on_submit():
             form.populate_obj(team)
             team.logo = ''
+            team.picture = ''
             if form.logo.data:
                 upload = s3_upload(form.logo.data.filename, form.logo)
                 team.logo = upload
                 flash('Logo uploaded to %s', upload)
+            if form.picture.data:
+                upload = s3_upload(form.picture.data.filename, form.picture)
+                team.picture = upload
+                flash('Picture uploaded to %s', upload)
             team.save()
             flash('New team added')
             return redirect(url_for('frontend.team', team=team.slug))
@@ -60,11 +65,16 @@ class TeamAdminView(FlaskView):
         form = TeamForm(obj=team)
         if form.validate_on_submit():
             if form.logo.data:
-                upload = s3_upload(form.logo)
+                upload_logo = s3_upload(form.logo)
             else:
-                upload = team.logo
+                upload_logo = team.logo
+            if form.picture.data:
+                upload_picture = s3_upload(form.picture)
+            else:
+                upload_picture = team.picture
             form.populate_obj(team)
-            team.logo = upload
+            team.logo = upload_logo
+            team.picture = upload_picture
             print 'Updated team information %s' % team.to_dict()
             team.save()
             flash('Changes Saved')

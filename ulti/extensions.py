@@ -7,6 +7,9 @@ db = MongoEngine()
 from flask.ext.mail import Mail
 mail = Mail()
 
+from flask.ext.misaka import Misaka
+md = Misaka()
+
 from flask_s3 import FlaskS3
 s3 = FlaskS3()
 

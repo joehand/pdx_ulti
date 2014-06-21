@@ -16,8 +16,10 @@ class Team(db.Document):
     fb_url = db.StringField(unique=True)
     email = db.StringField()
     logo = db.StringField()
+    picture = db.StringField()
     #division = db.StringField(choices=DIVISIONS)
     brief_about = db.StringField(max_length=255)
+    description = db.StringField()
 
     created_time = db.DateTimeField(default=datetime.utcnow(),
             required=True)

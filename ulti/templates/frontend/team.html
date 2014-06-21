@@ -5,34 +5,115 @@
 {% block bodyclass %}team-page{% endblock bodyclass %}
 
 {%- block pageheader -%}
-<div class="team-header">
-    <h1 class="team-name">
-        {{team.name}}
-        <img class="team-logo" src="{{team.logo}}"/>
-    </h1>
-    <nav  role="navigation" class="team-nav">
+<div class="team-header cf">
+    <header role="banner" class="team-name banner medium-float-left">
+        <h1 class="small-caps"><a class="" href="{{url_for('frontend.team', slug=team.slug)}}">{{team.name}}</a></h1>
+    </header>
+    <nav role="navigation" class="team-nav medium-float-left">
         <ul class="small-caps">
             <li class="nav-item"><a href="{{url_for('frontend.team', slug=team.slug)}}#about">About</a></li>
             <li class="nav-item"><a href="{{url_for('frontend.team', slug=team.slug)}}#roster">Roster</a></li>
             <li class="nav-item"><a href="{{url_for('frontend.team', slug=team.slug)}}#contact">Contact</a></li>
         </ul>
     </nav>
+    <div class="team-social-head float-right">
+        <ul>
+            <li class="nav-item"><a class="email ss-icon ss-social-circle" href="mailto:{{team.email}}">Email</a></li>
+            <li class="nav-item"><a class="facebook ss-icon ss-social-circle" href="{{team.fb_url}}" rel="me">Facebook</a></li>
+            <li class="nav-item"><a class="twitter ss-icon ss-social-circle" href="http://twitter.com/{{team.twitter}}/" rel="me">Twitter</a></li>
+        </ul>
+    </div>
 </div>
+<div class="site-head-border strip"></div>
 {% endblock pageheader -%}
 
 {%- block content -%}
-<div  class="team-content">
-    <p id="about" class="brief-desc">{{team.brief_about}}</p>
-    <div id="roster" class="team-roster"></div>
+<div class="team-picture" style="background-image:url('{{team.picture}}');" data-150-start="top:455px" data-end="top:650px"></div>
+<div class="team-content wrapper">
+    <div class="team-logo"><img id="logo" src="{{team.logo}}"/></div>
+    <p class="team-brief">{{team.brief_about}}</p>
+
+    <div class="team-about-wrap cf">
+        {% if team.description %}
+        <div id="about" class="team-description">
+            {{team.description|markdown|safe}}
+        </div>
+        {% endif %}
+        {% if team.twitter %}
+        <div class="team-twitter">
+            {%- include "frontend/partials/_twitter.html" %}
+        </div>
+        {% endif %}
+    </div>
+
+    {% if team.roster_url %}
+    <div id="roster" class="team-roster">
+      <h3 class="h1 text-center">Team Roster</h3>
+      <div id="rosterTable"></div>
+      <script id="rosterTable" type="text/html">
+          {% raw %}
+          <table>
+            <tr>
+                <th class="tHeader">Name</th>
+                <th class="tHeader">Number</th>
+                <th class="tHeader">Height</th>
+                <th class="tHeader">Age</th>
+                <th class="tHeader">Hometown</th>
+            </tr>
+              {{#rows}}
+                <tr>
+                    <td class="{{#captain}}captain{{/captain}}">{{name}}</td>
+                    <td>{{number}}</td>
+                    <td>{{height}}</td>
+                    <td>{{age}}</td>
+                    <td>{{hometown}}</td>
+                </tr>
+              {{/rows}}
+          </table>
+          {% endraw %}
+      </script>
+    </div>
+    {% endif %}
 </div>
 {%- endblock -%}
 
 {%- block pagefooter -%}
-<div id="contact" class="team-footer">
-    <p>
-        <a href="mailto:{{team.email}}">Email {{team.name}}</a>
-        <a class="facebook ss-icon ss-social-circle" href="{{team.fb_url}}" rel="me">Facebook</a>
-        <a class="twitter ss-icon ss-social-circle" href="http://twitter.com/{{team.twitter}}/" rel="me">Twitter</a>
-    </p>
+<hr>
+<div id="contact" class="team-contact wrapper">
+    <h3 class="text-center">Contact {{team.name}}:
+            <a href="mailto:{{team.email}}" rel="me">Email</a> |
+            <a href="{{team.fb_url}}" rel="me">Facebook</a> |
+            <a href="http://twitter.com/{{team.twitter}}/" rel="me">Twitter</a>
+    </h3>
 </div>
 {% endblock pagefooter -%}
+
+
+{%- block footer_js -%}
+<script type="text/javascript" src="{{ url_for('static', filename='js/libs/skrollr.js')}}"></script>
+<script type="text/javascript">
+    var s = skrollr.init();
+</script>
+{% if team.roster_url %}
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/libs/tabletop.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/libs/sheetsee.js')}}"></script>
+
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        var URL = "{{team.roster_url}}"
+        Tabletop.init( { key: URL, callback: rosterData, simpleSheet: true } )
+    })
+    function rosterData(data) {
+        console.log(data);
+
+        var tableOptions = {"data": data
+        , "pagination": 100, "tableDiv": "#rosterTable"}
+        Sheetsee.makeTable(tableOptions)
+        Sheetsee.initiateTableFilter(tableOptions)
+    }
+</script>
+{% endif %}
+
+
+{%- endblock footer_js %}

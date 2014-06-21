@@ -9,7 +9,7 @@ from .user import user, User, Role
 from .utils import prettydate
 
 from .config import Config, DevelopmentConfig, ProductionConfig
-from .extensions import assets, db, mail, security, s3
+from .extensions import assets, db, mail, md, security, s3
 
 # For import *
 __all__ = ['create_app']
@@ -65,6 +65,9 @@ def configure_extensions(app):
 
     # Flask assets
     assets.init_app(app)
+
+    # markdown
+    md.init_app(app)
 
     # flask s3
     s3.init_app(app)

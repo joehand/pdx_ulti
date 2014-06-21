@@ -34,7 +34,7 @@
         {% endblock siteheader -%}
 
         {%- block main %}
-            <main role="main" class="main wrapper">
+            <main role="main" class="main">
                 <div class="page-header">
                 {%- block pageheader -%}
                 {% endblock pageheader -%}
@@ -63,11 +63,16 @@
                     <div class="wrapper">
                         <span class="copyright medium-float-left">
                             <a href="http://creativecommons.org/licenses/by-nc-nd/4.0/">Copyright © 2014</a>
-                            &nbsp;·&nbsp; PDX Ultimate
+                            &nbsp;·&nbsp; PDX Ultimate{% if team and team.name %} / {{team.name}}{% endif %}
                         </span>
                         <span class="made medium-float-right">
+                            {% if not team %}
                             <a href="#">Contact</a>
-                            &nbsp;·&nbsp;<a href="http://joeahand.com">Made by <span class="useicons">&#xe635;</span></a>
+                            {% else %}
+                            <a class="team-admin-link" href="{{url_for('admin.team', slug=team.slug)}}">Admin</a>
+                            {% endif %}
+                            &nbsp;·&nbsp;
+                            <a href="http://joeahand.com">Made by <span class="useicons">&#xe635;</span></a>
                         </span>
                     </div>
                 </div>

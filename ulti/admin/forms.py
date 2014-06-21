@@ -10,8 +10,9 @@ class TeamForm(Form):
     ''' Form to submit a team
     '''
     name = TextField('Team Name', validators=[required()])
-    logo = FileField('Team Logo', validators=[optional()])
     slug = TextField('Slug', validators=[optional()])
+    logo = FileField('Team Logo', validators=[optional()])
+    picture = FileField('Team Picture', validators=[optional()])
     email = EmailField('Contact Email',
         validators=[required(), email()])
     roster_url = URLField('Roster Google Doc URL',
@@ -21,4 +22,6 @@ class TeamForm(Form):
     twitter = TextField('Twitter Handle', validators=[optional()])
     fb_url = URLField('Facebook URL', validators=[url(), optional()])
     brief_about = TextAreaField('Brief Description',
-        validators=[optional()])
+        validators=[optional(), length(max=255)])
+    description = TextAreaField('Detailed Description',
+            validators=[optional()])
