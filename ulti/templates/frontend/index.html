@@ -1,20 +1,49 @@
 {% extends "frontend/_frontend_base.html" %}
 
+{% block title %}Portland Ultimate Frisbee | Club Teams{%- endblock -%}
+
 {%- block pageheader -%}
-<h1>PDX Ultimate Frisbee</h1>
-<h3>Club Teams</h3>
+<header class="home-head">
+    <h1>Portland Utlimate Frisbee</h1>
+    <h2>Club Teams</h2>
+</header>
 {%- endblock -%}
 
 {%- block content -%}
-{% for team in teams %}
-<h5>
-<a href="{{url_for('frontend.team', slug=team.slug)}}">{{team.name}}</a>
-</h5>
-{% endfor %}
+<nav class="home-nav wrapper">
+    {% for team in teams %}
+    <div class="team-listing">
+        <a class="cf" href="{{url_for('frontend.team', slug=team.slug)}}">
+            <div class="team-logo-wrap">
+                <img class="team-logo" src="{{team.logo}}"/>
+            </div>
+            <div class="team-info-wrap">
+                <h3 class="team-name">{{team.name}}</h3>
+                <p class="team-about">{{team.brief_about}}</p>
+            </div>
+        </a>
+    </div>
+    {% endfor %}
+</nav>
+<div class="home-content wrapper cf">
+    <hr>
+    <div class="home-info float-left">
+        <h4 class="text-center">Club Team Information</h4>
+        <p><a href="{{url_for('frontend.index')}}">PDXUltimate.com</a> is a resourse to find out about club ultimate frisbee teams in <strong>Portland, Oregon</strong>. Please visit the team pages for information and to contact the teams directly.</p>
+    </div>
+    <div class="home-info float-left">
+        <h4 class="text-center">Portland Ultimate Information</h4>
+        <p>Please visit <a href="http://www.portlandultimate.org/">PortlandUltimate.org</a>, home of the Portland Ultimate Flying-disc Federation, for information about <strong>pickup</strong>, <strong>leagues</strong>, and <strong>other ultimate information</strong>.</p>
+    </div>
+</div>
 {%- endblock content -%}
 
 
 {%- block pagefooter -%}
-<hr>
-<p>PDXUltimate.com is the place to find information about all the Ultimate Frisbee clubs in Portland. To contact a team direct, please use contact information listed on their page. If you are interested in leages or pickup in Portland, please visit PortlandUltimate.com</p>
+
+<footer class="wrapper">
+    <div class="bridge">
+        <img src="{{ url_for('static', filename='img/bridge.png')}}">
+    </div>
+</footer>
 {%- endblock -%}

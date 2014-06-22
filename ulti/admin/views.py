@@ -42,7 +42,7 @@ class AdminView(FlaskView):
                 flash('Picture uploaded to %s', upload)
             team.save()
             flash('New team added')
-            return redirect(url_for('frontend.team', team=team.slug))
+            return redirect(url_for('frontend.team', slug=team.slug))
         return render_template('admin/new.html', form=form)
 
 

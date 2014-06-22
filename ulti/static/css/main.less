@@ -119,7 +119,68 @@ p a {
    Home Page
 \* ================================================================== */
 
+.home-head {
+    display:none;
+}
 
+.home-nav {
+
+    .team-listing {
+        width:800px;
+        margin:25px auto 125px;
+
+        a {
+            display:block;
+            height:100%;
+            min-height:200px;
+        }
+
+        .team-logo {
+            height:200px;
+            width:auto;
+            margin:0 auto;
+            display:block;
+        }
+
+        .team-info-wrap {
+            width:450px;
+            opacity:0;
+            position:absolute;
+            text-align:center;
+            left:50%;
+            margin:15px 0 0 -225px;
+            transition: all 500ms ease-in;
+        }
+
+        a:hover {
+            .team-info-wrap {
+                opacity:1;
+                color:@black;
+            }
+        }
+
+        .team-name {
+            display:none;
+        }
+
+        .team-about {
+            font-size:@9-size;
+
+        }
+    }
+}
+
+.home-info {
+    width:50%;
+    padding:20px;
+}
+
+.bridge {
+    img {
+        margin:0 auto;
+        display:block;
+    }
+}
 
 /* ================================================================== *\
    Footer

@@ -4,11 +4,11 @@
 <fieldset class="">
     {{ wtf.regular_field(form.name) }}
     {{ wtf.regular_field(form.slug) }}
-    {% if team.logo %}
+    {% if team and team.logo %}
         <img src="{{team.logo}}"/>
     {% endif %}
     {{ wtf.regular_field(form.logo) }}
-    {% if team.picture %}
+    {% if team and team.picture %}
         <img src="{{team.picture}}"/>
     {% endif %}
     {{ wtf.regular_field(form.picture) }}
