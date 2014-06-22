@@ -1,4 +1,4 @@
-# manage.py
+# manage.py 
 import os
 
 from flask import url_for
@@ -11,7 +11,7 @@ from flask.ext.security.utils import encrypt_password
 
 from ulti import create_app
 from ulti.config import ProductionConfig, DevelopmentConfig
-from ulti.extensions import db
+from ulti.extensions import db, assets
 from ulti.user import User, Role
 
 if os.environ.get('PRODUCTION'):
