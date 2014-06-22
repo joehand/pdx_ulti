@@ -3,6 +3,8 @@ import os
 
 from flask import url_for
 
+from flask.ext.assets import ManageAssets
+from flask.ext.s3 import create_all
 from flask.ext.script import Manager, Shell, Server
 from flask.ext.security import MongoEngineUserDatastore
 from flask.ext.security.utils import encrypt_password
