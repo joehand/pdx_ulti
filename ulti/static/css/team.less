@@ -104,6 +104,32 @@ body.team-page {
         margin-top:25px;
         padding:15px;
         background-color:#fff;
+        text-transform:uppercase;
+
+        .captain {
+            position:relative;
+
+            &:hover {
+                &:after {
+                    content:' (Captain)';
+                    text-transform:none;
+                    font-variant:small-caps;
+                    position:absolute;
+                    padding-left:15px;
+                }
+            }
+        }
+
+        .captain:before {
+            content:'';
+            background-color:@gray-darkest;
+            position:absolute;
+            height:100%;
+            width:5px;
+            display:block;
+            top:0;
+            left:0;
+        }
     }
 
     .team-contact {
