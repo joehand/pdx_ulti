@@ -55,14 +55,39 @@ def routes():
         print line
 
 @manager.command
-def buildjs():
+def build_js():
     ''' Builds the js for production
         TODO: Build css here too.
     '''
     jsfile = 'app.min.js'
-    os.system('cd ulti/static/js && node libs/r.js -o app.build.js out=../build/%s'%jsfile)
-    os.system('cd ulti/static/js && cp libs/require.js ../build/')
-    jsfile = 'ulti/static/build/' + jsfile
+    os.system('cd jhand/static/js && node libs/r.js -o app.build.js out=../build/%s'%jsfile)
+    os.system('cd jhand/static/js && cp libs/require.js ../build/')
+    jsfile = 'jhand/static/build/' + jsfile
+
+def clear_css_cache():
+    import logging
+    from webassets.script import CommandLineEnvironment
+
+    # Setup a logger
+    log = logging.getLogger('webassets')
+    log.addHandler(logging.StreamHandler())
+    log.setLevel(logging.DEBUG)
+
+    cmdenv = CommandLineEnvironment(assets, log)
+    cmdenv.clean()
+
+@manager.command
+def upload():
+    print 'starting file upload to Amazon S3'
+    create_all(app)
+    print 'done with file upload'
+
+@manager.command
+def make_production():
+    clear_css_cache()
+    #build_js()
+    upload()
+
 
 def shell_context():
     return dict(app=app)
